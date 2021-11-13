@@ -33,6 +33,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
+#include <libseastar/error.h>
 #include <libseastar/vector.h>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ static IndexResult priv_vector_resize(Vector *vector) {
 
     // 1. Realloc fails--old memory block is untouched
     if (NULL == new_container) {
-        return (IndexResult){.ok = false, .error = VECTOR_ERRNO_SET | errno};
+        return (IndexResult){.ok = false, .error = SEASTAR_ERRNO_SET | errno};
     } else if (new_container != vector->container) {
         vector->container = new_container;
     }
@@ -119,7 +120,8 @@ VoidResult cs_vector_init(Vector *vector) {
 ////
 PointerResult cs_vector_get(Vector *vector, size_t index) {
     if (index >= vector->size) {
-        return (PointerResult){.ok = false, .error = VECTOR_INVALID_INDEX};
+        return (PointerResult){
+            .ok = false, .error = SEASTAR_ERROR_INVALID_INDEX};
     }
 
     return (PointerResult){.ok = true, .value = vector->container[index]};
@@ -142,7 +144,7 @@ PointerResult cs_vector_get(Vector *vector, size_t index) {
 ////
 VoidResult cs_vector_set(Vector *vector, size_t index, void *user_data) {
     if (index >= vector->size) {
-        return (VoidResult){.ok = false, .error = VECTOR_INVALID_INDEX};
+        return (VoidResult){.ok = false, .error = SEASTAR_ERROR_INVALID_INDEX};
     }
 
     vector->container[index] = user_data;

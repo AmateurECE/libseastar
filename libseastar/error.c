@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            vector.h
+// NAME:            error.c
 //
 // AUTHOR:          Ethan D. Twardy <ethan.twardy@gmail.com>
 //
-// DESCRIPTION:     An array-based container that expands dynamically
+// DESCRIPTION:     Implementation of library error handling.
 //
 // CREATED:         11/13/2021
 //
@@ -30,50 +30,15 @@
 // IN THE SOFTWARE.
 ////
 
-#ifndef SEASTAR_VECTOR_H
-#define SEASTAR_VECTOR_H
+#include <libseastar/error.h>
 
-#include <stddef.h>
-
-#include <libseastar/iterator.h>
-#include <libseastar/result.h>
-
-static const size_t CS_VECTOR_DEFAULT_SIZE = 10;
-
-// A function that determines how much to expand the vector given its current
-// capacity. Can be used to override the default behavior.
-typedef size_t ExpansionFunction(size_t n);
-
-// The default expansion function
-size_t cs_vector_default_expansion_function(size_t n);
-
-// Vector struct
-typedef struct Vector {
-    // USER CUSTOMIZABLE
-    ExpansionFunction *expander;
-
-    // NOT USER CUSTOMIZABLE
-    size_t size;
-    size_t capacity;
-    void **container;
-} Vector;
-
-// Initialize a vector
-VoidResult cs_vector_init(Vector *vector);
-
-// Get/set values
-PointerResult cs_vector_get(Vector *vector, size_t index);
-VoidResult cs_vector_set(Vector *vector, size_t index, void *user_data);
-
-// Push the data onto the back of the vector, expanding if necessary.
-IndexResult cs_vector_push_back(Vector *vector, void *user_data);
-
-// De-initialize the vector
-void cs_vector_free(Vector *vector);
-
-// Iterator function
-Iterator cs_vector_iter(Vector *vector);
-
-#endif // SEASTAR_VECTOR_H
+const char *cs_strerror(enum SeaStarError error) {
+    switch (error) {
+    case SEASTAR_ERROR_INVALID_INDEX:
+        return "Index out of bounds for container";
+    default:
+        return "(null)";
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
