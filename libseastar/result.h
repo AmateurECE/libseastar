@@ -35,6 +35,7 @@
 #define SEASTAR_RESULT_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 // Result type containing a standard void* datum if .ok
 typedef struct PointerResult {
