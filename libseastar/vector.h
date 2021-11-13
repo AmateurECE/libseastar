@@ -35,6 +35,7 @@
 
 #include <stddef.h>
 
+#include <libseastar/iterator.h>
 #include <libseastar/result.h>
 
 static const size_t CS_VECTOR_DEFAULT_SIZE = 10;
@@ -80,6 +81,9 @@ IndexResult cs_vector_push_back(Vector *vector, void *user_data);
 
 // De-initialize the vector
 void cs_vector_free(Vector *vector);
+
+// Iterator function
+Iterator cs_vector_iter(Vector *vector);
 
 #endif // SEASTAR_VECTOR_H
 

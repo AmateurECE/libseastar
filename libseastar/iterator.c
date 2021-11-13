@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            main.c
+// NAME:            iterator.c
 //
 // AUTHOR:          Ethan D. Twardy <ethan.twardy@gmail.com>
 //
-// DESCRIPTION:     Test entrypoint
+// DESCRIPTION:     Implementation of the iterator
 //
 // CREATED:         11/13/2021
 //
@@ -30,41 +30,19 @@
 // IN THE SOFTWARE.
 ////
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <libseastar/iterator.h>
 
-#include <libseastar/vector.h>
-
-void assert(bool test, const char *message) {
-    if (!test) {
-        fprintf(stderr, "%s\n", message);
-        exit(1);
-    }
-}
-
-int main() {
-    Vector vector;
-    cs_vector_init(&vector);
-    int datum = 12;
-    const size_t index = 0;
-    IndexResult index_result = cs_vector_push_back(&vector, &datum);
-    assert(index_result.ok, "cs_vector_push_back did not return ok");
-    assert(index == index_result.value,
-        "cs_vector_push_back did not return the correct value");
-
-    PointerResult pointer_result = cs_vector_get(&vector, index);
-    assert(pointer_result.ok, "cs_vector_get did not return .ok");
-    assert(*(int *)pointer_result.value == datum,
-        "cs_vector_get did not return the correct value");
-
-    Iterator vector_iter = cs_vector_iter(&vector);
-    assert(*(int *)cs_iter_next(&vector_iter) == datum,
-        "cs_iter_next did not return the correct value");
-    assert(
-        NULL == cs_iter_next(&vector_iter), "cs_iter_next did not return NULL");
-
-    cs_vector_free(&vector);
-    return 0;
+///////////////////////////////////////////////////////////////////////////////
+// FUNCTION:        cs_iter_next
+//
+// DESCRIPTION:     Return the next element in the iterator, or NULL
+//
+// ARGUMENTS:       none
+//
+// RETURN:          Return the next element in the iterator, or NULL
+////
+void *cs_iter_next(Iterator *iterator) {
+    return iterator->next(iterator->private, &iterator->state);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

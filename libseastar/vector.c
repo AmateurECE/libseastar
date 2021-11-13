@@ -40,7 +40,7 @@
 ////
 
 // Resize the vector, returning the new size
-IndexResult priv_vector_resize(Vector *vector) {
+static IndexResult priv_vector_resize(Vector *vector) {
     size_t new_size = vector->expander(vector->capacity);
     void **new_container =
         realloc(vector->container, new_size * sizeof(void *));
@@ -53,6 +53,24 @@ IndexResult priv_vector_resize(Vector *vector) {
     }
 
     return (IndexResult){.ok = true, .value = vector->size};
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// FUNCTION:        private_iter_next
+//
+// DESCRIPTION:     Return the next element in the iterator.
+//
+// ARGUMENTS:       private: The Vector*
+//                  state: The index of the iterator
+//
+// RETURN:          The next element, or NULL.
+////
+static void *private_iter_next(void *private, union IteratorState *state) {
+    Vector *vector = (Vector *)private;
+    if (state->size < vector->size) {
+        return vector->container[state->size++];
+    }
+    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -170,6 +188,22 @@ void cs_vector_free(Vector *vector) {
         free(vector->container);
         vector->container = NULL;
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// FUNCTION:        cs_vector_iter
+//
+// DESCRIPTION:     Return an iterator to iterate over the container
+//
+// ARGUMENTS:       vector: The vector to iterate over.
+//
+// RETURN:          An Iterator
+////
+Iterator cs_vector_iter(Vector *vector) {
+    Iterator iter = {0};
+    iter.next = private_iter_next;
+    iter.private = vector;
+    return iter;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

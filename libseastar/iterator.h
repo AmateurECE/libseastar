@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            main.c
+// NAME:            iterator.h
 //
 // AUTHOR:          Ethan D. Twardy <ethan.twardy@gmail.com>
 //
-// DESCRIPTION:     Test entrypoint
+// DESCRIPTION:     Iterators for containers
 //
 // CREATED:         11/13/2021
 //
@@ -30,41 +30,32 @@
 // IN THE SOFTWARE.
 ////
 
-#include <stdio.h>
+#ifndef SEASTAR_ITERATOR_H
+#define SEASTAR_ITERATOR_H
+
 #include <stdlib.h>
 
-#include <libseastar/vector.h>
+union IteratorState {
+    size_t size;
+    void *pointer;
+};
 
-void assert(bool test, const char *message) {
-    if (!test) {
-        fprintf(stderr, "%s\n", message);
-        exit(1);
-    }
-}
+typedef void *NextFn(void *, union IteratorState *);
 
-int main() {
-    Vector vector;
-    cs_vector_init(&vector);
-    int datum = 12;
-    const size_t index = 0;
-    IndexResult index_result = cs_vector_push_back(&vector, &datum);
-    assert(index_result.ok, "cs_vector_push_back did not return ok");
-    assert(index == index_result.value,
-        "cs_vector_push_back did not return the correct value");
+// The iterator is more-or-less just a vtable. Don't attempt to edit fields of
+// this struct. Iterators can be created on the stack and destroyed
+// automatically since they do not allocate any memory. If the container they
+// reference goes out of scope, though, they are no longer valid.
+typedef struct Iterator {
+    // NO USER CUSTOMIZABLE FIELDS
+    NextFn *next;
+    void *private;
+    union IteratorState state;
+} Iterator;
 
-    PointerResult pointer_result = cs_vector_get(&vector, index);
-    assert(pointer_result.ok, "cs_vector_get did not return .ok");
-    assert(*(int *)pointer_result.value == datum,
-        "cs_vector_get did not return the correct value");
+// Return the next element in this iterator
+void *cs_iter_next(Iterator *iterator);
 
-    Iterator vector_iter = cs_vector_iter(&vector);
-    assert(*(int *)cs_iter_next(&vector_iter) == datum,
-        "cs_iter_next did not return the correct value");
-    assert(
-        NULL == cs_iter_next(&vector_iter), "cs_iter_next did not return NULL");
-
-    cs_vector_free(&vector);
-    return 0;
-}
+#endif // SEASTAR_ITERATOR_H
 
 ///////////////////////////////////////////////////////////////////////////////

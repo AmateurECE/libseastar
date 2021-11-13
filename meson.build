@@ -34,6 +34,7 @@ project('libseastar', 'c', version: '0.1.0')
 
 seastar_files = files([
   'libseastar/vector.c',
+  'libseastar/iterator.c',
 ])
 
 libseastar = static_library(
@@ -46,6 +47,7 @@ libseastar = static_library(
 install_headers(
   'libseastar/vector.h',
   'libseastar/result.h',
+  'libseastar/iterator.h',
   subdir: 'libseastar',
 )
 
