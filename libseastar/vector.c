@@ -174,6 +174,29 @@ IndexResult cs_vector_push_back(Vector *vector, void *user_data) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// FUNCTION:        cs_vector_remove
+//
+// DESCRIPTION:     Remove an element from the vector and shift all elements
+//                  behind it up to fill the newly empty space.
+//
+// ARGUMENTS:       index: The index of the element to remove
+//
+// RETURN:          PointerResult containing the removed element's data.
+////
+PointerResult cs_vector_remove(Vector *vector, size_t index) {
+    if (index >= vector->size) {
+        return (PointerResult){
+            .ok = false, .error = SEASTAR_ERROR_INVALID_INDEX};
+    }
+    void *value = vector->container[index];
+    for (size_t i = index; i < vector->size - 1; ++i) {
+        vector->container[index] = vector->container[index + 1];
+    }
+    vector->size -= 1;
+    return (PointerResult){.ok = true, .value = value};
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // FUNCTION:        cs_vector_free
 //
 // DESCRIPTION:     De-initialize the vector, freeing any internally-allocated

@@ -51,6 +51,7 @@ int main() {
     assert(index_result.ok, "cs_vector_push_back did not return ok");
     assert(index == index_result.value,
         "cs_vector_push_back did not return the correct value");
+    assert(vector.size == 1, "vector size is wrong");
 
     PointerResult pointer_result = cs_vector_get(&vector, index);
     assert(pointer_result.ok, "cs_vector_get did not return .ok");
@@ -60,8 +61,14 @@ int main() {
     Iterator vector_iter = cs_vector_iter(&vector);
     assert(*(int *)cs_iter_next(&vector_iter) == datum,
         "cs_iter_next did not return the correct value");
-    assert(
-        NULL == cs_iter_next(&vector_iter), "cs_iter_next did not return NULL");
+    assert(NULL == cs_iter_next(&vector_iter),
+        "cs_iter_next did not return NULL");
+
+    pointer_result = cs_vector_remove(&vector, 0);
+    assert(pointer_result.ok, "cs_vector_remove failed");
+    assert(*(int *)pointer_result.value == datum,
+        "cs_vector_remove returned the wrong element");
+    assert(vector.size == 0, "vector size is wrong");
 
     cs_vector_free(&vector);
     return 0;
