@@ -78,6 +78,9 @@ VoidResult cs_vector_set(Vector* vector, size_t index, void* user_data);
 // Push the data onto the back of the vector, expanding if necessary.
 IndexResult cs_vector_push_back(Vector* vector, void* user_data);
 
+// De-initialize the vector
+void cs_vector_free(Vector* vector);
+
 #endif // SEASTAR_VECTOR_H
 
 ///////////////////////////////////////////////////////////////////////////////

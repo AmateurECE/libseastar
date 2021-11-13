@@ -156,3 +156,22 @@ IndexResult cs_vector_push_back(Vector* vector, void* user_data) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// FUNCTION:        cs_vector_free
+//
+// DESCRIPTION:     De-initialize the vector, freeing any internally-allocated
+//                  resources. Note that this does not assume any allocation
+//                  scheme for data contained in the vector, so if data remains
+//                  in the vector, this may result in a memory leak.
+//
+// ARGUMENTS:       none
+//
+// RETURN:          none
+////
+void cs_vector_free(Vector* vector) {
+    if (NULL != vector->container) {
+        free(vector->container);
+        vector->container = NULL;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
