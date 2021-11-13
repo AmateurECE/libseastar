@@ -45,6 +45,7 @@ libseastar = static_library(
 
 install_headers(
   'libseastar/vector.h',
+  'libseastar/result.h',
   subdir: 'libseastar',
 )
 
