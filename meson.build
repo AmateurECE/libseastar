@@ -33,8 +33,9 @@
 project('libseastar', 'c', version: '0.1.0')
 
 seastar_files = files([
-  'libseastar/vector.c',
+  'libseastar/error.c',
   'libseastar/iterator.c',
+  'libseastar/vector.c',
 ])
 
 libseastar = static_library(
