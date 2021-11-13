@@ -40,19 +40,19 @@
 ////
 
 // Resize the vector, returning the new size
-IndexResult priv_vector_resize(Vector* vector) {
+IndexResult priv_vector_resize(Vector *vector) {
     size_t new_size = vector->expander(vector->capacity);
-    void** new_container = realloc(vector->container,
-        new_size * sizeof(void*));
+    void **new_container =
+        realloc(vector->container, new_size * sizeof(void *));
 
     // 1. Realloc fails--old memory block is untouched
     if (NULL == new_container) {
-        return (IndexResult){ .ok=false, .error=VECTOR_ERRNO_SET | errno };
+        return (IndexResult){.ok = false, .error = VECTOR_ERRNO_SET | errno};
     } else if (new_container != vector->container) {
         vector->container = new_container;
     }
 
-    return (IndexResult){ .ok=true, .value=vector->size };
+    return (IndexResult){.ok = true, .value = vector->size};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,9 +68,7 @@ IndexResult priv_vector_resize(Vector* vector) {
 //
 // RETURN:          2 * n
 ////
-size_t cs_vector_default_expansion_function(size_t n) {
-    return 2 * n;
-}
+size_t cs_vector_default_expansion_function(size_t n) { return 2 * n; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // FUNCTION:        cs_vector_init
@@ -81,15 +79,15 @@ size_t cs_vector_default_expansion_function(size_t n) {
 //
 // RETURN:          none
 ////
-VoidResult cs_vector_init(Vector* vector) {
+VoidResult cs_vector_init(Vector *vector) {
     vector->size = 0;
     vector->capacity = CS_VECTOR_DEFAULT_SIZE;
-    vector->container = calloc(vector->capacity, sizeof(void*));
+    vector->container = calloc(vector->capacity, sizeof(void *));
     if (NULL == vector->container) {
-        return (VoidResult){ .ok=false, .error=errno };
+        return (VoidResult){.ok = false, .error = errno};
     }
 
-    return (VoidResult){ .ok=true, 0 };
+    return (VoidResult){.ok = true, 0};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,12 +99,12 @@ VoidResult cs_vector_init(Vector* vector) {
 //
 // RETURN:          PointerResult, with data set to pointer to element if ok.
 ////
-PointerResult cs_vector_get(Vector* vector, size_t index) {
+PointerResult cs_vector_get(Vector *vector, size_t index) {
     if (index >= vector->size) {
-        return (PointerResult){ .ok=false, .error=VECTOR_INVALID_INDEX };
+        return (PointerResult){.ok = false, .error = VECTOR_INVALID_INDEX};
     }
 
-    return (PointerResult){ .ok=true, .value=vector->container[index] };
+    return (PointerResult){.ok = true, .value = vector->container[index]};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,13 +122,13 @@ PointerResult cs_vector_get(Vector* vector, size_t index) {
 //
 // RETURN:          VoidResult
 ////
-VoidResult cs_vector_set(Vector* vector, size_t index, void* user_data) {
+VoidResult cs_vector_set(Vector *vector, size_t index, void *user_data) {
     if (index >= vector->size) {
-        return (VoidResult){ .ok=false, .error=VECTOR_INVALID_INDEX };
+        return (VoidResult){.ok = false, .error = VECTOR_INVALID_INDEX};
     }
 
     vector->container[index] = user_data;
-    return (VoidResult){ .ok=true, 0 };
+    return (VoidResult){.ok = true, 0};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -143,7 +141,7 @@ VoidResult cs_vector_set(Vector* vector, size_t index, void* user_data) {
 //
 // RETURN:          IndexResult containing index of new element on success.
 ////
-IndexResult cs_vector_push_back(Vector* vector, void* user_data) {
+IndexResult cs_vector_push_back(Vector *vector, void *user_data) {
     if (vector->size >= vector->capacity) {
         IndexResult result = priv_vector_resize(vector);
         if (!result.ok) {
@@ -152,7 +150,7 @@ IndexResult cs_vector_push_back(Vector* vector, void* user_data) {
     }
 
     vector->container[vector->size++] = user_data;
-    return (IndexResult){ .ok=true, .value=vector->size - 1 };
+    return (IndexResult){.ok = true, .value = vector->size - 1};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,7 +165,7 @@ IndexResult cs_vector_push_back(Vector* vector, void* user_data) {
 //
 // RETURN:          none
 ////
-void cs_vector_free(Vector* vector) {
+void cs_vector_free(Vector *vector) {
     if (NULL != vector->container) {
         free(vector->container);
         vector->container = NULL;

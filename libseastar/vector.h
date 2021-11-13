@@ -50,8 +50,8 @@ typedef size_t ExpansionFunction(size_t n);
 //      const char* message = strerror(result.error ^ VECTOR_ERRNO_SET);
 //  }
 enum VectorError {
-    VECTOR_ERRNO_SET=1<<16,         // errno is set in this result
-    VECTOR_INVALID_INDEX=2<<16,     // Attempted access on invalid index
+    VECTOR_ERRNO_SET = 1 << 16,     // errno is set in this result
+    VECTOR_INVALID_INDEX = 2 << 16, // Attempted access on invalid index
 };
 
 // The default expansion function
@@ -60,26 +60,26 @@ size_t cs_vector_default_expansion_function(size_t n);
 // Vector struct
 typedef struct Vector {
     // USER CUSTOMIZABLE
-    ExpansionFunction* expander;
+    ExpansionFunction *expander;
 
     // NOT USER CUSTOMIZABLE
     size_t size;
     size_t capacity;
-    void** container;
+    void **container;
 } Vector;
 
 // Initialize a vector
-VoidResult cs_vector_init(Vector* vector);
+VoidResult cs_vector_init(Vector *vector);
 
 // Get/set values
-PointerResult cs_vector_get(Vector* vector, size_t index);
-VoidResult cs_vector_set(Vector* vector, size_t index, void* user_data);
+PointerResult cs_vector_get(Vector *vector, size_t index);
+VoidResult cs_vector_set(Vector *vector, size_t index, void *user_data);
 
 // Push the data onto the back of the vector, expanding if necessary.
-IndexResult cs_vector_push_back(Vector* vector, void* user_data);
+IndexResult cs_vector_push_back(Vector *vector, void *user_data);
 
 // De-initialize the vector
-void cs_vector_free(Vector* vector);
+void cs_vector_free(Vector *vector);
 
 #endif // SEASTAR_VECTOR_H
 

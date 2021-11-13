@@ -40,7 +40,7 @@
 typedef struct PointerResult {
     bool ok;
     union {
-        void* value;
+        void *value;
         int error;
     };
 } PointerResult;

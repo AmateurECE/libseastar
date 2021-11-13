@@ -35,7 +35,7 @@
 
 #include <libseastar/vector.h>
 
-void assert(bool test, const char* message) {
+void assert(bool test, const char *message) {
     if (!test) {
         fprintf(stderr, "%s\n", message);
         exit(1);
@@ -54,7 +54,7 @@ int main() {
 
     PointerResult pointer_result = cs_vector_get(&vector, index);
     assert(pointer_result.ok, "cs_vector_get did not return .ok");
-    assert(*(int*)pointer_result.value == datum,
+    assert(*(int *)pointer_result.value == datum,
         "cs_vector_get did not return the correct value");
     return 0;
 }
