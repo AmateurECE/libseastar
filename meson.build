@@ -35,19 +35,21 @@ project('libseastar', 'c', version: '0.1.0')
 seastar_files = files([
   'libseastar/error.c',
   'libseastar/iterator.c',
+  'libseastar/pqueue.c',
   'libseastar/vector.c',
 ])
 
 libseastar = static_library(
   'seastar',
   sources: seastar_files,
-  c_args: ['-Wall', '-Wextra', '-g', '-O0'],
+  c_args: ['-Wall', '-Wextra', '-Os'],
   install: true,
 )
 
 install_headers(
   'libseastar/error.h',
   'libseastar/iterator.h',
+  'libseastar/pqueue.h',
   'libseastar/result.h',
   'libseastar/vector.h',
   subdir: 'libseastar',
@@ -59,7 +61,7 @@ pkgconfig.generate(libseastar, filebase: 'libseastar')
 executable(
   'seastar_test',
   'test/main.c',
-  c_args: ['-Wall', '-Wextra', '-g', '-O0'],
+  c_args: ['-Wall', '-Wextra'],
   include_directories: ['libseastar'],
   link_with: [libseastar],
 )
