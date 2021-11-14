@@ -30,8 +30,8 @@
 // IN THE SOFTWARE.
 ////
 
-#include <libseastar/pqueue.h>
 #include <libseastar/error.h>
+#include <libseastar/pqueue.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Public Interface
@@ -46,7 +46,7 @@
 //
 // RETURN:          VoidResult
 ////
-VoidResult cs_pqueue_init(PriorityQueue* queue, ComparisonFn* comparator) {
+VoidResult cs_pqueue_init(PriorityQueue *queue, ComparisonFn *comparator) {
     queue->comparator = comparator;
     return cs_vector_init(&queue->container);
 }
@@ -60,14 +60,14 @@ VoidResult cs_pqueue_init(PriorityQueue* queue, ComparisonFn* comparator) {
 //
 // RETURN:          IndexResult containing the new size of the queue.
 ////
-IndexResult cs_pqueue_push(PriorityQueue* queue, void* user_data) {
+IndexResult cs_pqueue_push(PriorityQueue *queue, void *user_data) {
     IndexResult result = cs_vector_push_back(&queue->container, user_data);
     if (!result.ok) {
         return result;
     }
 
     cs_pqueue_sort(queue);
-    return (IndexResult){.ok=true, .value=queue->container.size};
+    return (IndexResult){.ok = true, .value = queue->container.size};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,12 +79,12 @@ IndexResult cs_pqueue_push(PriorityQueue* queue, void* user_data) {
 //
 // RETURN:          PointerResult containing the next element to be popped.
 ////
-PointerResult cs_pqueue_peek(PriorityQueue* queue) {
+PointerResult cs_pqueue_peek(PriorityQueue *queue) {
     if (queue->container.size > 0) {
         return cs_vector_get(&queue->container, 0);
     }
 
-    return (PointerResult){.ok=false, .error=SEASTAR_ERROR_INVALID_INDEX};
+    return (PointerResult){.ok = false, .error = SEASTAR_ERROR_INVALID_INDEX};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ PointerResult cs_pqueue_peek(PriorityQueue* queue) {
 //
 // RETURN:          PointerResult containing the popped element
 ////
-PointerResult cs_pqueue_pop(PriorityQueue* queue) {
+PointerResult cs_pqueue_pop(PriorityQueue *queue) {
     return cs_vector_remove(&queue->container, 0);
 }
 
@@ -110,9 +110,9 @@ PointerResult cs_pqueue_pop(PriorityQueue* queue) {
 //
 // RETURN:          none
 ////
-void cs_pqueue_sort(PriorityQueue* queue) {
-    qsort((void*)queue->container.container, queue->container.size,
-        sizeof(void*), queue->comparator);
+void cs_pqueue_sort(PriorityQueue *queue) {
+    qsort((void *)queue->container.container, queue->container.size,
+        sizeof(void *), queue->comparator);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ void cs_pqueue_sort(PriorityQueue* queue) {
 //
 // RETURN:          none
 ////
-void cs_pqueue_free(PriorityQueue* queue) {
+void cs_pqueue_free(PriorityQueue *queue) {
     cs_vector_free(&queue->container);
 }
 
@@ -137,7 +137,7 @@ void cs_pqueue_free(PriorityQueue* queue) {
 //
 // RETURN:          Iterator
 ////
-Iterator cs_pqueue_iter(PriorityQueue* queue) {
+Iterator cs_pqueue_iter(PriorityQueue *queue) {
     return cs_vector_iter(&queue->container);
 }
 

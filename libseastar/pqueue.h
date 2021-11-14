@@ -42,39 +42,39 @@
 // yields the higher of the two, or the lower, as long as behavior is
 // consistent. Also, note that this signature is required for the purposes of
 // the sorting function, but the arguments and return type are really void**.
-typedef int ComparisonFn(const void*, const void*);
+typedef int ComparisonFn(const void *, const void *);
 
 // PriorityQueue: Sorts elements upon insertion/deletion. As of right now, the
 // sorting algorithm chosen is not stable. Also is implemented using a vector,
 // which may change in the future.
 typedef struct PriorityQueue {
     // USER CUSTOMIZABLE FIELDS
-    ComparisonFn* comparator;
+    ComparisonFn *comparator;
 
     // NON USER CUSTOMIZABLE FIELDS
     Vector container;
 } PriorityQueue;
 
 // Initialize a queue
-VoidResult cs_pqueue_init(PriorityQueue* queue, ComparisonFn* comparator);
+VoidResult cs_pqueue_init(PriorityQueue *queue, ComparisonFn *comparator);
 
 // Push a new element into the queue (requires a sort), return new queue size
-IndexResult cs_pqueue_push(PriorityQueue* queue, void* user_data);
+IndexResult cs_pqueue_push(PriorityQueue *queue, void *user_data);
 
 // Peek at the queue
-PointerResult cs_pqueue_peek(PriorityQueue* queue);
+PointerResult cs_pqueue_peek(PriorityQueue *queue);
 
 // Pop the next element from the queue
-PointerResult cs_pqueue_pop(PriorityQueue* queue);
+PointerResult cs_pqueue_pop(PriorityQueue *queue);
 
 // Explicitly sort the queue
-void cs_pqueue_sort(PriorityQueue* queue);
+void cs_pqueue_sort(PriorityQueue *queue);
 
 // Free internally allocated memory
-void cs_pqueue_free(PriorityQueue* queue);
+void cs_pqueue_free(PriorityQueue *queue);
 
 // Create an iterator for the priority queue
-Iterator cs_pqueue_iter(PriorityQueue* queue);
+Iterator cs_pqueue_iter(PriorityQueue *queue);
 
 #endif // SEASTAR_PQUEUE_H
 

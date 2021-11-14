@@ -35,14 +35,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <libseastar/vector.h>
 #include <libseastar/pqueue.h>
+#include <libseastar/vector.h>
 
 void assert(bool test, const char *message, ...) {
     va_list argument_list;
     va_start(argument_list, message);
     if (!test) {
-        char* formatted_message = NULL;
+        char *formatted_message = NULL;
         int result = vasprintf(&formatted_message, message, argument_list);
         if (-1 == result) {
             fprintf(stderr, "Out of memory!");
@@ -54,12 +54,12 @@ void assert(bool test, const char *message, ...) {
     }
 }
 
-void print_int_vector(Vector* vector) {
+void print_int_vector(Vector *vector) {
     if (vector->size > 0) {
-        printf("%d", *(int*)vector->container[0]);
+        printf("%d", *(int *)vector->container[0]);
     }
     for (size_t i = 1; i < vector->size; ++i) {
-        printf(" %d", *(int*)vector->container[i]);
+        printf(" %d", *(int *)vector->container[i]);
     }
     printf("\n");
 }
@@ -95,9 +95,9 @@ void test_vector() {
     cs_vector_free(&vector);
 }
 
-int example_comparator(const void* one, const void* two) {
-    int first = **(int**)one;
-    int second = **(int**)two;
+int example_comparator(const void *one, const void *two) {
+    int first = **(int **)one;
+    int second = **(int **)two;
     if (first > second) {
         return 1;
     } else if (first == second) {
@@ -131,18 +131,18 @@ void test_pqueue() {
 
     PointerResult pointer_result = cs_pqueue_peek(&pqueue);
     assert(pointer_result.ok, "cs_pqueue_peek returned error");
-    assert(*(int*)pointer_result.value == second,
+    assert(*(int *)pointer_result.value == second,
         "line %d: cs_pqueue_peek, expected=%d, got=%d", __LINE__, second,
-        *(int*)pointer_result.value);
+        *(int *)pointer_result.value);
 
     pointer_result = cs_pqueue_pop(&pqueue);
     assert(pointer_result.ok, "cs_pqueue_pop returned error");
-    assert(*(int*)pointer_result.value == second,
+    assert(*(int *)pointer_result.value == second,
         "cs_pqueue_pop returned wrong value");
 
     pointer_result = cs_pqueue_pop(&pqueue);
     assert(pointer_result.ok, "cs_pqueue_pop returned error");
-    assert(*(int*)pointer_result.value == first,
+    assert(*(int *)pointer_result.value == first,
         "cs_pqueue_pop returned wrong value");
     assert(1 == pqueue.container.size, "Pqueue has wrong size!");
 }
