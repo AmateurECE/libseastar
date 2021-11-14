@@ -39,9 +39,10 @@
 #include <libseastar/vector.h>
 
 void assert(bool test, const char *message, ...) {
-    va_list argument_list;
-    va_start(argument_list, message);
     if (!test) {
+        va_list argument_list;
+        va_start(argument_list, message);
+
         char *formatted_message = NULL;
         int result = vasprintf(&formatted_message, message, argument_list);
         if (-1 == result) {
