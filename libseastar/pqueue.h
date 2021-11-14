@@ -33,6 +33,7 @@
 #ifndef SEASTAR_PQUEUE_H
 #define SEASTAR_PQUEUE_H
 
+#include <libseastar/iterator.h>
 #include <libseastar/result.h>
 #include <libseastar/vector.h>
 
@@ -66,8 +67,14 @@ PointerResult cs_pqueue_peek(PriorityQueue* queue);
 // Pop the next element from the queue
 PointerResult cs_pqueue_pop(PriorityQueue* queue);
 
+// Explicitly sort the queue
+void cs_pqueue_sort(PriorityQueue* queue);
+
 // Free internally allocated memory
 void cs_pqueue_free(PriorityQueue* queue);
+
+// Create an iterator for the priority queue
+Iterator cs_pqueue_iter(PriorityQueue* queue);
 
 #endif // SEASTAR_PQUEUE_H
 

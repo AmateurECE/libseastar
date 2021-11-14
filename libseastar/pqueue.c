@@ -66,8 +66,7 @@ IndexResult cs_pqueue_push(PriorityQueue* queue, void* user_data) {
         return result;
     }
 
-    qsort((void*)queue->container.container, queue->container.size,
-        sizeof(void*), queue->comparator);
+    cs_pqueue_sort(queue);
     return (IndexResult){.ok=true, .value=queue->container.size};
 }
 
@@ -102,6 +101,21 @@ PointerResult cs_pqueue_pop(PriorityQueue* queue) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// FUNCTION:        cs_pqueue_sort
+//
+// DESCRIPTION:     Explicitly sort the pqueue (e.g. after updating all the
+//                  elements via an iterator).
+//
+// ARGUMENTS:       none
+//
+// RETURN:          none
+////
+void cs_pqueue_sort(PriorityQueue* queue) {
+    qsort((void*)queue->container.container, queue->container.size,
+        sizeof(void*), queue->comparator);
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // FUNCTION:        cs_pqueue_free
 //
 // DESCRIPTION:     Free internally allocated memory for the queue.
@@ -112,6 +126,19 @@ PointerResult cs_pqueue_pop(PriorityQueue* queue) {
 ////
 void cs_pqueue_free(PriorityQueue* queue) {
     cs_vector_free(&queue->container);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// FUNCTION:        cs_pqueue_iter
+//
+// DESCRIPTION:     Create an iterator to iterate over elements of the queue
+//
+// ARGUMENTS:       none
+//
+// RETURN:          Iterator
+////
+Iterator cs_pqueue_iter(PriorityQueue* queue) {
+    return cs_vector_iter(&queue->container);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
